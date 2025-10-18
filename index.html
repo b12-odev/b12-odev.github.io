@@ -249,6 +249,48 @@ setInterval(async ()=>{
     });
   }
 </script>
+<button id="installBtn" style="
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: #ff7f11;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 20px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 999;
+  display: none;
+">
+  📲 Ana ekrana ekle
+</button>
 
+<script>
+  let deferredPrompt;
+  const installBtn = document.getElementById("installBtn");
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    // Tarayıcı kendi popup'ını göstermesin
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = "block"; // Buton görünür olsun
+  });
+
+  installBtn.addEventListener("click", async () => {
+    installBtn.style.display = "none";
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log("Kullanıcı seçimi:", outcome);
+      deferredPrompt = null;
+    }
+  });
+
+  window.addEventListener("appinstalled", () => {
+    console.log("Uygulama ana ekrana eklendi!");
+  });
+</script>
 </body>
 </html>
