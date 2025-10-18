@@ -1,0 +1,22 @@
+{
+  "name": "9B Ödev Listesi",
+  "short_name": "9B Ödev",
+  "description": "9B Sınıfı için ödev takip uygulaması.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#e9f5ff",
+  "theme_color": "#1d3557",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
