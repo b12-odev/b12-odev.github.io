@@ -1,4 +1,4 @@
-const CACHE_NAME = '9b-odev-cache-v1';
+const CACHE_NAME = '9b-odev-cache-v2';
 // Önbelleğe alınacak temel dosyalar:
 const urlsToCache = [
   '/', // Ana sayfayı temsil eder
