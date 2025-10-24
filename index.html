@@ -14,6 +14,7 @@ body {
   margin:0; padding:0;
   display:flex; flex-direction:column;
   min-height:100vh;
+  transition: background 0.3s ease; /* Tema geçişi için */
 }
 h1 {text-align:center; color:#1d3557; margin-top:25px; font-size:1.8em; display:flex; align-items:center; justify-content:center;}
 h1 img {height:40px; margin-right:10px;}
@@ -27,27 +28,126 @@ button:hover {background:#356e8c;}
 @keyframes fadeIn {from{opacity:0; transform:translateY(-10px);}to{opacity:1; transform:translateY(0);}}
 .form input, .form textarea {width:100%; margin-bottom:12px; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:0.95em;}
 .form label {font-size:0.9em; color:#555; display:block; margin-bottom:5px;}
-.odev {position:relative; background:#f8f9fa; border-radius:10px; padding:12px 15px; margin-bottom:12px; box-shadow:0 2px 5px rgba(0,0,0,0.05); transition:0.2s; display:flex; justify-content:space-between; align-items:center;}
+
+/* DEĞİŞİKLİK: Ödev kartı (display: flex eklendi) */
+.odev {
+  position:relative; 
+  background:#f8f9fa; 
+  border-radius:10px; 
+  padding:12px 15px; 
+  margin-bottom:12px; 
+  box-shadow:0 2px 5px rgba(0,0,0,0.05); 
+  transition:0.2s; 
+  overflow: hidden;
+  display: flex; /* İçerikleri yan yana hizalamak için */
+  justify-content: space-between; /* İçerik ve buton/etiketleri ayırmak için */
+  align-items: flex-start; /* İçerikleri yukarı hizalamak için */
+}
 .odev:hover {transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+
+/* YENİ: Süresi dolmuş ödev kartı için stil */
+.odev.gecmis-kart {
+  opacity: 0.7;
+  background: #fdfdfd;
+}
+
 .odev b {font-size:1.1em; color:#1d3557;}
 .odev small {color:#666;}
-.etiket {font-weight:bold; padding:2px 10px; border-radius:20px; font-size:0.85em; white-space:nowrap; position:absolute; top:10px; right:10px; opacity:0; animation:bubble 0.3s forwards;}
+
+/* DEĞİŞİKLİK: Etiket stili */
+.etiket {
+  font-weight:bold; 
+  padding:4px 12px; 
+  border-radius:20px; 
+  font-size:0.85em; 
+  white-space:nowrap;
+  margin-bottom: 5px;
+}
+
 .bugun {background:#2a9d8f; color:white;}
 .yarina {background:#e9c46a; color:#333;}
 .gecmis {background:#e63946; color:white;}
-@keyframes bubble {0%{transform:scale(0.5); opacity:0;}100%{transform:scale(1); opacity:1;}}
+
 .bos {text-align:center; color:#777; font-size:1.1em; margin-top:20px;}
 footer {text-align:center; font-size:0.9em; color:#444; margin-top:auto; padding:20px;}
 #gizli {opacity:0; text-align:center; font-size:1.1em; color:#1d3557; transition:opacity 0.5s; font-weight:bold; padding-bottom:40px;}
 #toplamTablo {width:100%; border-collapse:collapse; margin-top:10px;}
 #toplamTablo th, #toplamTablo td {border:1px solid #ccc; padding:6px; text-align:center;}
 #toplamTablo tbody {display:none;}
+
+
+/* YENİ: Silme Butonu Stili */
+.sil-btn {
+    background: none;
+    border: none;
+    color: #e63946; /* Kırmızı renk */
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 2px 5px;
+    transition: color 0.2s;
+    line-height: 1;
+    width: auto; /* Kart butonlarından farklı boyut */
+}
+.sil-btn:hover {
+    color: #a82e38;
+}
+
+/* YENİ: Tema Butonu Stili */
+#temaToggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    background: #f1faee;
+    color: #1d3557;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+#temaToggle:hover {
+    background: #e0e0e0;
+}
+
+
+/* YENİ: Dark Tema CSS Sınıfları */
+body.dark-theme {
+    background: linear-gradient(180deg, #1e1e1e, #333);
+    color: #f5f5f5;
+}
+.container.dark-theme {
+    background: #2b2b2b;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+body.dark-theme h1, body.dark-theme h2 {
+    color: #e0e0e0;
+}
+.odev.dark-theme {
+    background: #3c3c3c;
+    color: #e0e0e0;
+    box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+}
+.odev.dark-theme b {
+    color: #ffffff;
+}
+.odev.dark-theme small {
+    color: #bbb;
+}
+body.dark-theme .bos {
+    color: #aaa;
+}
+.dark-theme .sil-btn { 
+    color: #ff7f87; /* Koyu temada daha açık kırmızı */
+}
 </style>
 </head>
 <body>
 
+<button id="temaToggle">☀️</button> 
+
 <h1><img src="logo.png" alt="Okul Logo">9B Ödev Listesi</h1>
-<div class="container">
+<div class="container" id="mainContainer">
 
 <button id="ekleBtn">+ Ödev Ekle</button>
 <div class="form" id="odevForm">
@@ -78,7 +178,7 @@ footer {text-align:center; font-size:0.9em; color:#444; margin-top:auto; padding
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, query, orderBy, doc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, query, orderBy, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyADRrn05EmhYR4eZoA9JegJ0ESpw2fPI4g",
@@ -102,6 +202,32 @@ const toplamTabloBody = document.querySelector("#toplamTablo tbody");
 const dersList = document.getElementById("dersList");
 const ekleyenList = document.getElementById("ekleyenList");
 
+/* YENİ: Tema ve Local Storage Değişkenleri */
+const temaToggle = document.getElementById("temaToggle");
+const mainContainer = document.getElementById("mainContainer");
+const BODY = document.body;
+let latestOdevlerData = []; // onSnapshot'tan gelen son veriyi tutar
+
+// YENİ: LocalStorage'dan gizlenmiş ödev ID'lerini çeker
+function getHiddenOdevIds() {
+    const hiddenIdsJson = localStorage.getItem('hiddenOdevler');
+    return hiddenIdsJson ? JSON.parse(hiddenIdsJson) : [];
+}
+
+// YENİ: Ödev ID'sini LocalStorage'a gizlenmiş olarak kaydeder
+function setHiddenOdevId(odevId) {
+    const hiddenIds = getHiddenOdevIds();
+    if (!hiddenIds.includes(odevId)) {
+        hiddenIds.push(odevId);
+        localStorage.setItem('hiddenOdevler', JSON.stringify(hiddenIds));
+    }
+}
+
+// YENİ: LocalStorage'dan ID kaydedildikten sonra listeyi yeniden çizer
+function triggerLocalListUpdate() {
+    updateHomeworkList(latestOdevlerData);
+}
+
 ekleBtn.addEventListener("click", ()=>{
   odevForm.style.display="block";
   ekleBtn.style.display="none";
@@ -120,8 +246,15 @@ kaydetBtn.addEventListener("click", async ()=>{
 
   if(!ders || !aciklama || !tarih){alert("Lütfen tüm alanları doldur!"); return;}
 
+  const yuklenmeZamaniStr = new Date().toISOString();
+
   await addDoc(collection(db,"odevler"),{
-    ders, aciklama, tarih, ekleyen, yuklenmeZamani: new Date().toISOString()
+    ders, aciklama, tarih, ekleyen, yuklenmeZamani: yuklenmeZamaniStr
+  });
+
+  await addDoc(collection(db, "odevLog"), {
+    ekleyen: ekleyen,
+    timestamp: yuklenmeZamaniStr 
   });
 
   document.getElementById("ders").value="";
@@ -132,81 +265,141 @@ kaydetBtn.addEventListener("click", async ()=>{
   ekleBtn.style.display="block";
 
   await eskiOdevleriSil();
-  await listeyiGoster();
-  await tabloGuncelle();
 });
 
-async function listeyiGoster(){
-  liste.innerHTML="";
-  const q = query(collection(db,"odevler"), orderBy("yuklenmeZamani","asc"));
-  const snapshot = await getDocs(q);
-  const odevler=[];
-  snapshot.forEach(doc => odevler.push({...doc.data(),id:doc.id}));
 
-  if(odevler.length===0){
-    const mesajlar=["Bugünlük ödev yok 😎","Rahatla, ödev yok 🧘","Günün keyfini çıkar 🎮"];
-    liste.innerHTML=`<div class='bos'>${mesajlar[Math.floor(Math.random()*mesajlar.length)]}</div>`;
-    return;
+function setupHomeworkListener() {
+  const q = query(collection(db, "odevler"), orderBy("yuklenmeZamani", "asc"));
+  
+  onSnapshot(q, (snapshot) => {
+    latestOdevlerData = []; // Global veriyi güncelle
+    snapshot.forEach(doc => latestOdevlerData.push({ ...doc.data(), id: doc.id }));
+    
+    updateHomeworkList(latestOdevlerData); 
+    updateAutocompleteLists(latestOdevlerData); 
+  });
+}
+
+function setupLeaderboardListener() {
+  const q = query(collection(db, "odevLog")); 
+  
+  onSnapshot(q, (snapshot) => {
+    const logEntries = [];
+    snapshot.forEach(doc => logEntries.push(doc.data()));
+    
+    updateLeaderboard(logEntries); 
+  });
+}
+
+
+/* GÜNCELLENMİŞ FONKSİYON: Lokal Silme ve Tema Class'ları Eklendi */
+function updateHomeworkList(odevler) {
+  liste.innerHTML = "";
+  const bugunTarih = new Date();
+  bugunTarih.setHours(0, 0, 0, 0);
+
+  const hiddenOdevIds = getHiddenOdevIds(); // Lokal olarak gizlenen ID'leri al
+
+  const processedHomeworks = odevler.map(o => {
+    if (!o.tarih) return { ...o, etiket: "" }; 
+    const tarihParcalari = o.tarih.split('-').map(Number);
+    const teslim = new Date(tarihParcalari[0], tarihParcalari[1] - 1, tarihParcalari[2]);
+
+    const farkGun = Math.round((teslim - bugunTarih) / (1000 * 60 * 60 * 24));
+    let etiket = "";
+
+    if (farkGun < 0) etiket = "gecmis";
+    else if (farkGun === 0) etiket = "bugun";
+    else if (farkGun === 1) etiket = "yarina";
+    
+    return { ...o, etiket };
+  });
+
+  // YENİ: Ödev listesini, gizlenmiş ID'ler hariç olacak şekilde filtrele
+  const visibleHomeworks = processedHomeworks.filter(o => !hiddenOdevIds.includes(o.id));
+
+  const aktifOdevler = visibleHomeworks.filter(o => o.etiket !== "gecmis");
+
+  if (aktifOdevler.length === 0) {
+    const mesajlar = ["Bugünlük ödev yok 😎", "Rahatla, ödev yok 🧘", "Günün keyfini çıkar 🎮"];
+    liste.innerHTML = `<div class='bos'>${mesajlar[Math.floor(Math.random() * mesajlar.length)]}</div>`;
   }
 
-  const bugunTarih = new Date(); bugunTarih.setHours(0,0,0,0);
-  odevler.forEach(o=>{
-    const teslim = new Date(o.tarih);
-    const farkGun = (teslim - bugunTarih)/(1000*60*60*24);
-    if(farkGun<0) o.etiket="gecmis";
-    else if(farkGun===0) o.etiket="bugun";
-    else if(farkGun===1) o.etiket="yarina";
-    else o.etiket="";
+  visibleHomeworks.sort((a, b) => {
+    const order = { "yarina": 1, "bugun": 2, "": 3, "gecmis": 4 };
+    if (order[a.etiket] !== order[b.etiket]) return order[a.etiket] - order[b.etiket];
+    const aTarih = new Date(a.tarih.split('-')[0], a.tarih.split('-')[1] - 1, a.tarih.split('-')[2]);
+    const bTarih = new Date(b.tarih.split('-')[0], b.tarih.split('-')[1] - 1, b.tarih.split('-')[2]);
+    return aTarih - bTarih;
   });
 
-  odevler.sort((a,b)=>{
-    const order={"yarina":1,"bugun":2,"":3,"gecmis":4};
-    if(order[a.etiket]!==order[b.etiket]) return order[a.etiket]-order[b.etiket];
-    return new Date(a.tarih)-new Date(b.tarih);
-  });
-
-  odevler.forEach(o=>{
-    let etiketHTML="";
-    if(o.etiket==="bugun") etiketHTML=`<span class="etiket bugun">Bugün!</span>`;
-    else if(o.etiket==="yarina") etiketHTML=`<span class="etiket yarina">Yarına!</span>`;
-    else if(o.etiket==="gecmis") etiketHTML=`<span class="etiket gecmis">Teslim süresi doldu</span>`;
-
-    liste.innerHTML+=`
-    <div class="odev">
-      <div>
+  const currentThemeClass = BODY.classList.contains('dark-theme') ? 'dark-theme' : '';
+  
+  visibleHomeworks.forEach(o => {
+    let etiketHTML = "";
+    let kartClass = "";
+    
+    if (o.etiket === "bugun") etiketHTML = `<span class="etiket bugun">Bugün</span>`;
+    else if (o.etiket === "yarina") etiketHTML = `<span class="etiket yarina">Yarına</span>`;
+    else if (o.etiket === "gecmis") {
+      etiketHTML = `<span class="etiket gecmis">Süresi Doldu</span>`;
+      kartClass = "gecmis-kart";
+    }
+    
+    let silButonuHTML = `<button class="sil-btn" data-id="${o.id}">🗑️</button>`;
+    
+    liste.innerHTML += `
+    <div class="odev ${kartClass} ${currentThemeClass}">
+      <div style="flex-grow: 1;">
         <b>${o.ders}</b><br>
         <span>${o.aciklama}</span><br>
-        <small>Son tarih: ${o.tarih} <br> Ödevi ekleyen: ${o.ekleyen}</small>
+        <small>Son tarih: ${o.tarih} <br> Ekleyen: ${o.ekleyen}</small>
       </div>
-      ${etiketHTML}
+      <div style="display: flex; flex-direction: column; align-items: flex-end;">
+        ${etiketHTML}
+        ${silButonuHTML}
+      </div>
     </div>`;
   });
+  
+  /* YENİ: Silme butonlarına olay dinleyicisi ekle */
+  document.querySelectorAll('.sil-btn').forEach(button => {
+    button.addEventListener('click', (e) => {
+        const odevId = e.target.dataset.id;
+        if (confirm("Bu ödevi SADECE kendi listenizden gizlemek istediğinizden emin misiniz? (Diğer herkes görmeye devam edecektir.)")) {
+            setHiddenOdevId(odevId); // ID'yi locale kaydet
+            triggerLocalListUpdate(); // Listeyi yeniden çiz (gizlensin)
+        }
+    });
+  });
+}
 
-  // autocomplete güncelle
+function updateLeaderboard(logEntries) {
+  toplamTabloBody.innerHTML = "";
+  const sayac = {};
+  logEntries.forEach(entry => { 
+    const ek = entry.ekleyen || "Anonim"; 
+    sayac[ek] = (sayac[ek] || 0) + 1;
+  });
+  const entries = Object.entries(sayac).sort((a, b) => b[1] - a[1]);
+  entries.forEach((e, i) => {
+    toplamTabloBody.innerHTML += `<tr><td>${i + 1}</td><td>${e[0]}</td><td>${e[1]}</td></tr>`;
+  });
+}
+
+function updateAutocompleteLists(odevler) {
   const dersSet = new Set();
   const ekleyenSet = new Set();
-  odevler.forEach(o=>{
-    dersSet.add(o.ders);
-    ekleyenSet.add(o.ekleyen);
+  odevler.forEach(o => {
+    if(o.ders) dersSet.add(o.ders);
+    if(o.ekleyen) ekleyenSet.add(o.ekleyen);
   });
-  dersList.innerHTML=""; ekleyenList.innerHTML="";
-  dersSet.forEach(d=> dersList.innerHTML += `<option value="${d}">`);
-  ekleyenSet.forEach(e=> ekleyenList.innerHTML += `<option value="${e}">`);
+  dersList.innerHTML = "";
+  ekleyenList.innerHTML = "";
+  dersSet.forEach(d => dersList.innerHTML += `<option value="${d}">`);
+  ekleyenSet.forEach(e => ekleyenList.innerHTML += `<option value="${e}">`);
 }
 
-async function tabloGuncelle(){
-  toplamTabloBody.innerHTML="";
-  const snapshot = await getDocs(collection(db,"odevler"));
-  const sayac = {};
-  snapshot.forEach(doc => {
-    const ek = doc.data().ekleyen || "Anonim";
-    sayac[ek] = (sayac[ek]||0)+1;
-  });
-  const entries = Object.entries(sayac).sort((a,b)=>b[1]-a[1]);
-  entries.forEach((e,i)=>{
-    toplamTabloBody.innerHTML+=`<tr><td>${i+1}</td><td>${e[0]}</td><td>${e[1]}</td></tr>`;
-  });
-}
 
 toplamBtn.addEventListener("click", ()=>{
   if(toplamTabloBody.style.display==="table-row-group"){
@@ -223,11 +416,10 @@ async function eskiOdevleriSil(){
   const bugun = new Date(); bugun.setHours(0,0,0,0);
   snapshot.forEach(async docu=>{
     const o = docu.data();
-    // sadece ödev formatına uyan belgeleri sil
     if (!o.tarih || !o.ders) return;
     const teslim = new Date(o.tarih);
     const farkGun = (bugun - teslim)/(1000*60*60*24);
-    if(farkGun >= 1){
+    if(farkGun >= 1){ 
       await deleteDoc(doc(db,"odevler",docu.id));
     }
   });
@@ -239,14 +431,51 @@ window.addEventListener("scroll",()=>{
   else gizli.style.opacity="0";
 });
 
-listeyiGoster();
-tabloGuncelle();
-eskiOdevleriSil();
+
+/* YENİ: Tema Değiştirme Fonksiyonları */
+
+function applyTheme(isDark) {
+    if (isDark) {
+        BODY.classList.add('dark-theme');
+        mainContainer.classList.add('dark-theme');
+        temaToggle.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        BODY.classList.remove('dark-theme');
+        mainContainer.classList.remove('dark-theme');
+        temaToggle.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+    }
+    // Listenin tema sınıfını güncelle
+    triggerLocalListUpdate();
+}
+
+// Butona tıklama olayı
+temaToggle.addEventListener('click', () => {
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(newTheme === 'dark');
+});
+
+// Sayfa yüklendiğinde temayı kontrol et
+(function loadTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (savedTheme === null && prefersDark)) {
+        applyTheme(true);
+    } else {
+        applyTheme(false);
+    }
+})();
+
+setupHomeworkListener();    
+setupLeaderboardListener(); 
+eskiOdevleriSil();          
+
 setInterval(async ()=>{
   await eskiOdevleriSil();
-  await listeyiGoster();
-  await tabloGuncelle();
-},2*60*1000);
+}, 2 * 60 * 1000); 
 </script>
 
 <script>
