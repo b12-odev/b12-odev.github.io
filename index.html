@@ -366,7 +366,7 @@ function updateHomeworkList(odevler) {
   document.querySelectorAll('.sil-btn').forEach(button => {
     button.addEventListener('click', (e) => {
         const odevId = e.target.dataset.id;
-        if (confirm("Bu ödevi SADECE kendi listenizden gizlemek istediğinizden emin misiniz? (Diğer herkes görmeye devam edecektir.)")) {
+        if (confirm("Bu ödevi SADECE kendinizden  gizlemek istediğinize emin misiniz?")) {
             setHiddenOdevId(odevId); // ID'yi locale kaydet
             triggerLocalListUpdate(); // Listeyi yeniden çiz (gizlensin)
         }
