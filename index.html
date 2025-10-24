@@ -14,10 +14,10 @@ body {
   margin:0; padding:0;
   display:flex; flex-direction:column;
   min-height:100vh;
-  transition: background 0.3s ease; /* Tema geçişi için */
+  transition: background 0.3s ease, color 0.3s ease; /* Tema geçişi için color da eklendi */
 }
 h1 {text-align:center; color:#1d3557; margin-top:25px; font-size:1.8em; display:flex; align-items:center; justify-content:center;}
-h1 img {height:40px; margin-right:10px;}
+h1 img {height:40px; margin-right:10px; border-radius: 5px;} /* YENİ: Logo için küçük bir border-radius */
 .container {flex:1; max-width:520px; margin:20px auto; background:#fff; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.1); padding:25px 20px 40px 20px; transition:0.3s ease;}
 button {background:#457b9d; color:white; border:none; padding:12px; width:100%; border-radius:8px; cursor:pointer; font-weight:600; font-size:1em; transition:background 0.2s;}
 button:hover {background:#356e8c;}
@@ -26,10 +26,9 @@ button:hover {background:#356e8c;}
 
 .form {display:none; margin-top:15px; animation:fadeIn 0.3s;}
 @keyframes fadeIn {from{opacity:0; transform:translateY(-10px);}to{opacity:1; transform:translateY(0);}}
-.form input, .form textarea {width:100%; margin-bottom:12px; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:0.95em;}
-.form label {font-size:0.9em; color:#555; display:block; margin-bottom:5px;}
+.form input, .form textarea {width:100%; margin-bottom:12px; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:0.95em; transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;} /* input/textarea için tema geçişi */
+.form label {font-size:0.9em; color:#555; display:block; margin-bottom:5px; transition: color 0.3s ease;} /* label için tema geçişi */
 
-/* DEĞİŞİKLİK: Ödev kartı (display: flex eklendi) */
 .odev {
   position:relative; 
   background:#f8f9fa; 
@@ -39,22 +38,21 @@ button:hover {background:#356e8c;}
   box-shadow:0 2px 5px rgba(0,0,0,0.05); 
   transition:0.2s; 
   overflow: hidden;
-  display: flex; /* İçerikleri yan yana hizalamak için */
-  justify-content: space-between; /* İçerik ve buton/etiketleri ayırmak için */
-  align-items: flex-start; /* İçerikleri yukarı hizalamak için */
+  display: flex; 
+  justify-content: space-between; 
+  align-items: flex-start; 
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* Ödev kartı için tema geçişi */
 }
 .odev:hover {transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,0.1);}
 
-/* YENİ: Süresi dolmuş ödev kartı için stil */
 .odev.gecmis-kart {
   opacity: 0.7;
   background: #fdfdfd;
 }
 
-.odev b {font-size:1.1em; color:#1d3557;}
-.odev small {color:#666;}
+.odev b {font-size:1.1em; color:#1d3557; transition: color 0.3s ease;}
+.odev small {color:#666; transition: color 0.3s ease;}
 
-/* DEĞİŞİKLİK: Etiket stili */
 .etiket {
   font-weight:bold; 
   padding:4px 12px; 
@@ -68,31 +66,29 @@ button:hover {background:#356e8c;}
 .yarina {background:#e9c46a; color:#333;}
 .gecmis {background:#e63946; color:white;}
 
-.bos {text-align:center; color:#777; font-size:1.1em; margin-top:20px;}
-footer {text-align:center; font-size:0.9em; color:#444; margin-top:auto; padding:20px;}
-#gizli {opacity:0; text-align:center; font-size:1.1em; color:#1d3557; transition:opacity 0.5s; font-weight:bold; padding-bottom:40px;}
+.bos {text-align:center; color:#777; font-size:1.1em; margin-top:20px; transition: color 0.3s ease;}
+footer {text-align:center; font-size:0.9em; color:#444; margin-top:auto; padding:20px; transition: color 0.3s ease;} /* Footer için tema geçişi */
+#gizli {opacity:0; text-align:center; font-size:1.1em; color:#1d3557; transition:opacity 0.5s, color 0.3s ease; font-weight:bold; padding-bottom:40px;} /* Gizli yazı için tema geçişi */
 #toplamTablo {width:100%; border-collapse:collapse; margin-top:10px;}
-#toplamTablo th, #toplamTablo td {border:1px solid #ccc; padding:6px; text-align:center;}
+#toplamTablo th, #toplamTablo td {border:1px solid #ccc; padding:6px; text-align:center; transition: border-color 0.3s ease;} /* Tablo için tema geçişi */
 #toplamTablo tbody {display:none;}
 
 
-/* YENİ: Silme Butonu Stili */
 .sil-btn {
     background: none;
     border: none;
-    color: #e63946; /* Kırmızı renk */
+    color: #e63946; 
     font-size: 1.1em;
     cursor: pointer;
     padding: 2px 5px;
     transition: color 0.2s;
     line-height: 1;
-    width: auto; /* Kart butonlarından farklı boyut */
+    width: auto; 
 }
 .sil-btn:hover {
     color: #a82e38;
 }
 
-/* YENİ: Tema Butonu Stili */
 #temaToggle {
     position: fixed;
     top: 20px;
@@ -105,6 +101,7 @@ footer {text-align:center; font-size:0.9em; color:#444; margin-top:auto; padding
     color: #1d3557;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     z-index: 1000;
+    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* Tema butonu için tema geçişi */
 }
 #temaToggle:hover {
     background: #e0e0e0;
@@ -114,7 +111,7 @@ footer {text-align:center; font-size:0.9em; color:#444; margin-top:auto; padding
 /* YENİ: Dark Tema CSS Sınıfları */
 body.dark-theme {
     background: linear-gradient(180deg, #1e1e1e, #333);
-    color: #f5f5f5;
+    color: #f5f5f5; /* Genel metin rengi */
 }
 .container.dark-theme {
     background: #2b2b2b;
@@ -123,6 +120,36 @@ body.dark-theme {
 body.dark-theme h1, body.dark-theme h2 {
     color: #e0e0e0;
 }
+body.dark-theme h1 img { /* YENİ: Logo arka planını koyu yap */
+    background: #333; /* Dark temada logonun arkası */
+}
+body.dark-theme .form input, body.dark-theme .form textarea { /* YENİ: Form alanları koyu temada */
+    background: #3c3c3c;
+    color: #e0e0e0;
+    border-color: #555;
+}
+body.dark-theme .form label { /* YENİ: Form label'ları koyu temada */
+    color: #ccc;
+}
+body.dark-theme #kaydetBtn, body.dark-theme #ekleBtn { /* YENİ: Butonlar koyu temada */
+    background: #1a4e6e;
+}
+body.dark-theme #kaydetBtn:hover, body.dark-theme #ekleBtn:hover {
+    background: #143e57;
+}
+body.dark-theme #vazgecBtn {
+    background: #c2333f;
+}
+body.dark-theme #vazgecBtn:hover {
+    background: #9d2a33;
+}
+body.dark-theme #toplamBtn {
+    background: #12283e;
+}
+body.dark-theme #toplamBtn:hover {
+    background: #0f2030;
+}
+
 .odev.dark-theme {
     background: #3c3c3c;
     color: #e0e0e0;
@@ -137,8 +164,34 @@ body.dark-theme h1, body.dark-theme h2 {
 body.dark-theme .bos {
     color: #aaa;
 }
+body.dark-theme footer p { /* YENİ: Footer metni koyu temada */
+    color: #bbb;
+}
+body.dark-theme #gizli { /* YENİ: Gizli yazı koyu temada */
+    color: #ccc;
+}
+body.dark-theme #toplamTablo th, body.dark-theme #toplamTablo td { /* YENİ: Tablo kenarlıkları koyu temada */
+    border-color: #555;
+}
+body.dark-theme #temaToggle { /* YENİ: Tema butonu koyu temada */
+    background: #4a4a4a;
+    color: #f1faee;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+body.dark-theme #temaToggle:hover {
+    background: #5a5a5a;
+}
 .dark-theme .sil-btn { 
-    color: #ff7f87; /* Koyu temada daha açık kırmızı */
+    color: #ff7f87; 
+}
+
+/* INSTALL BUTONU İÇİN KOYU TEMA DÜZENLEMESİ */
+body.dark-theme #installBtn {
+  background: #bb620a !important;
+  color: #fff !important;
+}
+body.dark-theme #installBtn:hover {
+  background: #994f08 !important;
 }
 </style>
 </head>
@@ -202,19 +255,16 @@ const toplamTabloBody = document.querySelector("#toplamTablo tbody");
 const dersList = document.getElementById("dersList");
 const ekleyenList = document.getElementById("ekleyenList");
 
-/* YENİ: Tema ve Local Storage Değişkenleri */
 const temaToggle = document.getElementById("temaToggle");
 const mainContainer = document.getElementById("mainContainer");
 const BODY = document.body;
-let latestOdevlerData = []; // onSnapshot'tan gelen son veriyi tutar
+let latestOdevlerData = []; 
 
-// YENİ: LocalStorage'dan gizlenmiş ödev ID'lerini çeker
 function getHiddenOdevIds() {
     const hiddenIdsJson = localStorage.getItem('hiddenOdevler');
     return hiddenIdsJson ? JSON.parse(hiddenIdsJson) : [];
 }
 
-// YENİ: Ödev ID'sini LocalStorage'a gizlenmiş olarak kaydeder
 function setHiddenOdevId(odevId) {
     const hiddenIds = getHiddenOdevIds();
     if (!hiddenIds.includes(odevId)) {
@@ -223,7 +273,6 @@ function setHiddenOdevId(odevId) {
     }
 }
 
-// YENİ: LocalStorage'dan ID kaydedildikten sonra listeyi yeniden çizer
 function triggerLocalListUpdate() {
     updateHomeworkList(latestOdevlerData);
 }
@@ -272,7 +321,7 @@ function setupHomeworkListener() {
   const q = query(collection(db, "odevler"), orderBy("yuklenmeZamani", "asc"));
   
   onSnapshot(q, (snapshot) => {
-    latestOdevlerData = []; // Global veriyi güncelle
+    latestOdevlerData = []; 
     snapshot.forEach(doc => latestOdevlerData.push({ ...doc.data(), id: doc.id }));
     
     updateHomeworkList(latestOdevlerData); 
@@ -292,13 +341,12 @@ function setupLeaderboardListener() {
 }
 
 
-/* GÜNCELLENMİŞ FONKSİYON: Lokal Silme ve Tema Class'ları Eklendi */
 function updateHomeworkList(odevler) {
   liste.innerHTML = "";
   const bugunTarih = new Date();
   bugunTarih.setHours(0, 0, 0, 0);
 
-  const hiddenOdevIds = getHiddenOdevIds(); // Lokal olarak gizlenen ID'leri al
+  const hiddenOdevIds = getHiddenOdevIds(); 
 
   const processedHomeworks = odevler.map(o => {
     if (!o.tarih) return { ...o, etiket: "" }; 
@@ -315,7 +363,6 @@ function updateHomeworkList(odevler) {
     return { ...o, etiket };
   });
 
-  // YENİ: Ödev listesini, gizlenmiş ID'ler hariç olacak şekilde filtrele
   const visibleHomeworks = processedHomeworks.filter(o => !hiddenOdevIds.includes(o.id));
 
   const aktifOdevler = visibleHomeworks.filter(o => o.etiket !== "gecmis");
@@ -362,13 +409,12 @@ function updateHomeworkList(odevler) {
     </div>`;
   });
   
-  /* YENİ: Silme butonlarına olay dinleyicisi ekle */
   document.querySelectorAll('.sil-btn').forEach(button => {
     button.addEventListener('click', (e) => {
         const odevId = e.target.dataset.id;
-        if (confirm("Bu ödevi SADECE kendinizden  gizlemek istediğinize emin misiniz?")) {
-            setHiddenOdevId(odevId); // ID'yi locale kaydet
-            triggerLocalListUpdate(); // Listeyi yeniden çiz (gizlensin)
+        if (confirm("Bu ödevi SADECE kendi listenizden gizlemek istediğinizden emin misiniz?")) {
+            setHiddenOdevId(odevId); 
+            triggerLocalListUpdate(); 
         }
     });
   });
@@ -432,8 +478,6 @@ window.addEventListener("scroll",()=>{
 });
 
 
-/* YENİ: Tema Değiştirme Fonksiyonları */
-
 function applyTheme(isDark) {
     if (isDark) {
         BODY.classList.add('dark-theme');
@@ -450,14 +494,12 @@ function applyTheme(isDark) {
     triggerLocalListUpdate();
 }
 
-// Butona tıklama olayı
 temaToggle.addEventListener('click', () => {
     const currentTheme = localStorage.getItem('theme') || 'light';
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     applyTheme(newTheme === 'dark');
 });
 
-// Sayfa yüklendiğinde temayı kontrol et
 (function loadTheme() {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
