@@ -386,8 +386,8 @@ function updateHomeworkList(odevler) {
     let etiketHTML = "";
     let kartClass = "";
     
-    if (o.etiket === "bugun") etiketHTML = `<span class="etiket bugun">Bugün</span>`;
-    else if (o.etiket === "yarina") etiketHTML = `<span class="etiket yarina">Yarına</span>`;
+    if (o.etiket === "bugun") etiketHTML = `<span class="etiket bugun">Bugüne😬</span>`;
+    else if (o.etiket === "yarina") etiketHTML = `<span class="etiket yarina">Yarına😰</span>`;
     else if (o.etiket === "gecmis") {
       etiketHTML = `<span class="etiket gecmis">Süresi Doldu</span>`;
       kartClass = "gecmis-kart";
@@ -412,7 +412,7 @@ function updateHomeworkList(odevler) {
   document.querySelectorAll('.sil-btn').forEach(button => {
     button.addEventListener('click', (e) => {
         const odevId = e.target.dataset.id;
-        if (confirm("Bu ödevi SADECE kendi listenizden gizlemek istediğinizden emin misiniz?")) {
+        if (confirm("Bu ödevi SADECE kendinizden  gizlemek istediğinize emin misiniz?")) {
             setHiddenOdevId(odevId); 
             triggerLocalListUpdate(); 
         }
