@@ -1,6 +1,6 @@
 {
-  "name": "9B Ödev Listesi",
-  "short_name": "9B Ödev",
+  "name": "B12",
+  "short_name": "B12",
   "description": "9B Sınıfı için ödev takip uygulaması.",
   "start_url": ".",
   "display": "standalone",
