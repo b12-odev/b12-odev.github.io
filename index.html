@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+    
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "b2b85e35-3faa-482b-b643-f9b010d8e8e5", // Sizin App ID'niz
+      // 🚨 KRİTİK: Kendi SW'nizi kullanmasını sağlayın
+      serviceWorker: {
+        path: './sw.js'
+      },
+      notifyButton: {
+        enable: false, // Varsayılan zili gizle
+      },
+      allowLocalhostAsSecureOrigin: true, // Yerel test için
+    });
+  });
+</script>
+   
+    
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>9B Ödev Listesi</title>
@@ -337,6 +357,32 @@ kaydetBtn.addEventListener("click", async ()=>{
       ekleyen: ekleyen,
       timestamp: yuklenmeZamaniStr 
     });
+  }
+  
+  // 🔥 YENİ ÖDEV EKLENDİĞİNDE ANINDA BİLDİRİM GÖNDERME KODU BAŞLANGIÇ
+  const restApiKey = "Os_v2_app_wk4f4nj7vjecxnsd7gybbwhi4uafhyzmtjbunz5p5mkqrsrtvmrxwt5hnzgve2kwo4a4wnbb5jocxfbyuqivh4cm2winbjpzvqpzbrq"; // ⬅️ Sizin REST API Anahtarınız
+  const appId = "b2b85e35-3faa-482b-b643-f9b010d8e8e5"; // Sizin App ID'niz
+
+  try {
+    await fetch("https://onesignal.com/api/v1/notifications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        // Anahtarı 'Basic' anahtar kelimesiyle birlikte gönderiyoruz
+        "Authorization": `Basic ${restApiKey}`
+      },
+      body: JSON.stringify({
+        app_id: appId,
+        included_segments: ["All"], // Uygulamayı yükleyen herkese gönder
+        headings: {"en": `📢 Yeni Ödev: ${ders}`}, // Bildirim başlığı
+        contents: {"en": `${aciklama} - Son Tarih: ${tarih}`}, // Bildirim içeriği
+        url: "https://b12-odev.github.io/" // Tıklandığında açılacak link
+      })
+    });
+    console.log("OneSignal bildirimi başarıyla tetiklendi.");
+  } catch (err) {
+    // API Key hatası, internet bağlantısı hatası vb. yakalanır
+    console.error("OneSignal Bildirim Gönderme Hatası:", err);
   }
   
   document.getElementById("ders").value="";
