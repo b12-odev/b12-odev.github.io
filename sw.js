@@ -1,42 +1,16 @@
-const CACHE_NAME = '9b-odev-cache-v3';
-// Önbelleğe alınacak temel dosyalar:
-const urlsToCache = [
-  '/', // Ana sayfayı temsil eder
-  'index.html', // Ana HTML dosyası
-  'logo.png', // Logo
-  'icon-192.png', // Manifest ikonu
-  'icon-512.png', // Manifest ikonu
-];
-
-// 1. Install (Yükleme) olayı: Önbelleği aç ve dosyaları ekle
+// Yeni Service Worker (sw.js) - Sadece Bildirimler İçin
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Önbellek açıldı');
-        return cache.addAll(urlsToCache);
-      })
-  );
+    // Kurulum olayını pas geç, önbellekleme yok.
+    self.skipWaiting();
 });
 
-// 2. Fetch (Veri Çekme) olayı: Önce önbelleğe bak
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Eğer dosya önbellekte varsa, oradan döndür
-        if (response) {
-          return response;
-        }
-        // Önbellekte yoksa, internetten çek
-        return fetch(event.request);
-      }
-    )
-  );
+    // Tüm ağ isteklerini doğrudan internete yönlendir. Önbelleğe bakma.
+    return fetch(event.request); 
 });
 
 // =======================================================
-// PUSH BİLDİRİM KISMI BAŞLANGIÇ
+// PUSH BİLDİRİM KISMI (Mevcut kodunuzdaki gibi kalabilir)
 // =======================================================
 
 // 3. Push Olayı: Sunucudan bildirim geldiğinde çalışır
@@ -46,10 +20,9 @@ self.addEventListener('push', function(event) {
     let data = { 
         title: 'Yeni Ödev!', 
         body: 'Yeni bir ödev eklendi, hemen kontrol et!',
-        icon: '/icon-192.png' // Manifestte kullandığınız ikon
+        icon: '/icon-192.png'
     };
 
-    // Sunucudan veri geliyorsa, o veriyi kullan
     if (event.data) {
         try {
             data = event.data.json();
@@ -63,10 +36,9 @@ self.addEventListener('push', function(event) {
     const options = {
         body: data.body,
         icon: data.icon,
-        badge: '/icon-192.png' // Android'de ikonun yanındaki küçük işaret için
+        badge: '/icon-192.png'
     };
 
-    // Bildirimin gösterilmesini bekler
     event.waitUntil(
         self.registration.showNotification(title, options)
     );
@@ -76,29 +48,21 @@ self.addEventListener('push', function(event) {
 self.addEventListener('notificationclick', function(event) {
     console.log('[Service Worker] Bildirime Tıklandı.');
     
-    event.notification.close(); // Bildirimi kapat
+    event.notification.close();
     
-    // Tıklandığında ana sayfayı veya ilgili sayfayı aç
     event.waitUntil(
         clients.matchAll({ type: 'window' })
             .then(windowClients => {
-                const urlToOpen = '/'; // Tıklanınca açılacak sayfa
-
-                // Zaten açık olan bir uygulama penceresi varsa, onu öne getir
+                const urlToOpen = '/';
                 for (let i = 0; i < windowClients.length; i++) {
                     const client = windowClients[i];
                     if (client.url === urlToOpen && 'focus' in client) {
                         return client.focus();
                     }
                 }
-                // Açık pencere yoksa, yeni bir pencere aç
                 if (clients.openWindow) {
                     return clients.openWindow(urlToOpen);
                 }
             })
     );
 });
-
-// =======================================================
-// PUSH BİLDİRİM KISMI SON
-// =======================================================
