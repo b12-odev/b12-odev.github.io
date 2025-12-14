@@ -1,68 +1,16 @@
-// Yeni Service Worker (sw.js) - Sadece Bildirimler İçin
+// 1. OneSignal'ın tüm bildirim ve altyapı kodunu içeri aktar.
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+
+// 2. Kendi PWA kaydınızı korumak için gerekli olan basit bir install/fetch bırakılabilir.
+// Aslında bu kodlar sadece dosyanın varlığını kanıtlamak içindir.
+// OneSignal'ı import ettiğiniz için, bildirim işleri artık onun kontrolündedir.
+
 self.addEventListener('install', event => {
-    // Kurulum olayını pas geç, önbellekleme yok.
+    // Kurulum olayını pas geç. Bu dosyanın varlığı PWA için yeterlidir.
     self.skipWaiting();
 });
 
 self.addEventListener('fetch', event => {
-    // Tüm ağ isteklerini doğrudan internete yönlendir. Önbelleğe bakma.
+    // Ağa git, hiçbir şeyi önbelleğe alma (sizin isteğiniz).
     return fetch(event.request); 
-});
-
-// =======================================================
-// PUSH BİLDİRİM KISMI (Mevcut kodunuzdaki gibi kalabilir)
-// =======================================================
-
-// 3. Push Olayı: Sunucudan bildirim geldiğinde çalışır
-self.addEventListener('push', function(event) {
-    console.log('[Service Worker] Push Bildirimi Geldi.');
-
-    let data = { 
-        title: 'Yeni Ödev!', 
-        body: 'Yeni bir ödev eklendi, hemen kontrol et!',
-        icon: '/icon-192.png'
-    };
-
-    if (event.data) {
-        try {
-            data = event.data.json();
-        } catch (e) {
-            data.body = event.data.text();
-        }
-    }
-    
-    const title = data.title;
-    
-    const options = {
-        body: data.body,
-        icon: data.icon,
-        badge: '/icon-192.png'
-    };
-
-    event.waitUntil(
-        self.registration.showNotification(title, options)
-    );
-});
-
-// 4. Notification Click Olayı: Kullanıcı bildirime tıkladığında çalışır
-self.addEventListener('notificationclick', function(event) {
-    console.log('[Service Worker] Bildirime Tıklandı.');
-    
-    event.notification.close();
-    
-    event.waitUntil(
-        clients.matchAll({ type: 'window' })
-            .then(windowClients => {
-                const urlToOpen = '/';
-                for (let i = 0; i < windowClients.length; i++) {
-                    const client = windowClients[i];
-                    if (client.url === urlToOpen && 'focus' in client) {
-                        return client.focus();
-                    }
-                }
-                if (clients.openWindow) {
-                    return clients.openWindow(urlToOpen);
-                }
-            })
-    );
 });
