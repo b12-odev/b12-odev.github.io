@@ -1,16 +1,16 @@
-// 1. OneSignal'ın tüm bildirim ve altyapı kodunu içeri aktar.
+// 1. OneSignal servis worker altyapısını içeri aktar
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
-// 2. Kendi PWA kaydınızı korumak için gerekli olan basit bir install/fetch bırakılabilir.
-// Aslında bu kodlar sadece dosyanın varlığını kanıtlamak içindir.
-// OneSignal'ı import ettiğiniz için, bildirim işleri artık onun kontrolündedir.
-
-self.addEventListener('install', event => {
-    // Kurulum olayını pas geç. Bu dosyanın varlığı PWA için yeterlidir.
-    self.skipWaiting();
+// 2. PWA yükleme gereksinimini karşıla ama hiçbir şeyi önbelleğe alma
+self.addEventListener('install', (event) => {
+    self.skipWaiting(); // Beklemeden yeni sürümü aktif et
 });
 
-self.addEventListener('fetch', event => {
-    // Ağa git, hiçbir şeyi önbelleğe alma (sizin isteğiniz).
-    return fetch(event.request); 
+self.addEventListener('activate', (event) => {
+    event.waitUntil(clients.claim()); // Kontrolü hemen ele al
+});
+
+// 3. Sıfır Önbellek (Her isteği doğrudan internetten çek)
+self.addEventListener('fetch', (event) => {
+    event.respondWith(fetch(event.request));
 });
